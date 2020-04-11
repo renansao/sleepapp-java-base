@@ -30,6 +30,6 @@ public class LoginController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		return new ResponseEntity<>(userRetrieved.getUserId(), HttpStatus.OK);
+		return new ResponseEntity<>(userRetrieved, HttpStatus.OK);
 	}
 }
