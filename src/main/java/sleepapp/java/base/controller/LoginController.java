@@ -32,4 +32,22 @@ public class LoginController {
 		
 		return new ResponseEntity<>(userRetrieved, HttpStatus.OK);
 	}
+	
+	@PostMapping(value="/updateUser")
+	public ResponseEntity<?> updateUser(@RequestBody UserDomain userRequested) {
+		
+		UserDomain userRetrieved = new UserDomain();
+		
+		try {
+			
+			userRetrieved = loginService.updateUser(userRequested);
+			
+		}catch (Exception e) {
+			
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<>(userRetrieved, HttpStatus.OK);
+	}
+	
 }

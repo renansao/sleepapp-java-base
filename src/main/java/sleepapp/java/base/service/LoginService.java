@@ -24,4 +24,17 @@ public class LoginService {
 		
 		return userDAO.findByEmail(userRequested.getEmail());
 	}
+	
+	public UserDomain updateUser(UserDomain userRequested) throws Exception {
+		
+		if (!userDAO.existsByUserId(userRequested.getUserId())) {
+			
+			throw new Exception("Usuário não encontrado na base");
+		}
+		
+		userDAO.save(userRequested);
+		
+		return userRequested;
+		
+	}
 }

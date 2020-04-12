@@ -11,4 +11,8 @@ public interface UserDAO extends MongoRepository<UserDomain, String>{
 	boolean existsByEmail (String email);
 
 	UserDomain findByEmail(String email);
+	
+	UserDomain findByUserId (String userId);
+
+	boolean existsByUserId(String userId);
 }

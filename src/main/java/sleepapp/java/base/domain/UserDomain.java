@@ -1,5 +1,7 @@
 package sleepapp.java.base.domain;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,9 +11,13 @@ public class UserDomain {
 	@Id
 	private String userId;
 	
+	@NotNull
 	private String nome;
 	
+	@NotNull
 	private String email;
+	
+	private String pictureUrl;
 	
 	public String getUserId() {
 		return userId;
@@ -31,6 +37,14 @@ public class UserDomain {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getPictureUrl() {
+		return pictureUrl;
+	}
+
+	public void setPictureUrl(String pictureUrl) {
+		this.pictureUrl = pictureUrl;
 	}
 	
 }
