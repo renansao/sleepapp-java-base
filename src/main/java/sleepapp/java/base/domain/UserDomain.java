@@ -17,6 +17,8 @@ public class UserDomain {
 	@NotNull
 	private String email;
 	
+	private String uid;
+	
 	private String pictureUrl;
 	
 	public String getUserId() {
@@ -45,6 +47,14 @@ public class UserDomain {
 
 	public void setPictureUrl(String pictureUrl) {
 		this.pictureUrl = pictureUrl;
+	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 	
 }
