@@ -44,7 +44,7 @@ public class AuthService {
 		
 	}
 
-	public boolean authenticate(RequestAuth requestAuth) {
+	public void authenticate(RequestAuth requestAuth) throws Exception {
 		
 		//UserDomain user = userDao.findByEmail(requestAuth.getUsername());
 		UidDomain uidDomain = uidDao.findByUsername(requestAuth.getUsername());
@@ -53,7 +53,10 @@ public class AuthService {
 		
 		byte[] uidByte = requestAuth.getUid().getBytes();
 		
-		return verifier.hash("$argon2d$v=19$m=65536,t=3,p=4$"+uidDomain.getUid()).password(uidByte).verifyEncoded();
+		if (!verifier.hash("$argon2d$v=19$m=65536,t=3,p=4$"+uidDomain.getUid()).password(uidByte).verifyEncoded()) {
+			
+			throw new Exception("Login/Senha inválidos");
+		}
 		
 	}
 	

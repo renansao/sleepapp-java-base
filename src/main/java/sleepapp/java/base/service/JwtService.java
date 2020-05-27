@@ -1,16 +1,15 @@
 package sleepapp.java.base.service;
 
 import java.time.Instant;
-import java.util.Base64;
 import java.util.Date;
 
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 
 @Service
 public class JwtService {
@@ -38,12 +37,20 @@ public class JwtService {
 		
 		byte[] secret = "RraIY0negneEQzv3XO6kwjN4XVtsul1A".getBytes();
 		
-		Jws<Claims> result = Jwts.parserBuilder()
-				 .setSigningKey(Keys.hmacShaKeyFor(secret))
-		         .build()
-		         .parseClaimsJws(jwt);
+		try {
+			
+			Jws<Claims> result = Jwts.parserBuilder()
+					 .setSigningKey(Keys.hmacShaKeyFor(secret))
+			         .build()
+			         .parseClaimsJws(jwt);
+			
+		}catch (SignatureException e) {
+			
+			throw new SignatureException("Token Inválido");
+		}
 		
-		System.out.println(result.getBody().getIssuer());
+		
+		
 	}
 	
 	public void test() {
