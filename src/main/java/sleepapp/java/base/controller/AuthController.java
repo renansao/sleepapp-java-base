@@ -11,6 +11,7 @@ import sleepapp.java.base.DAO.UserDAO;
 import sleepapp.java.base.domain.RequestAuth;
 import sleepapp.java.base.domain.UserDomain;
 import sleepapp.java.base.service.AuthService;
+import sleepapp.java.base.service.JwtService;
 
 @RestController
 public class AuthController {
@@ -21,8 +22,11 @@ public class AuthController {
 	@Autowired
 	private UserDAO userDao;
 	
+	@Autowired
+	private JwtService jwtService;
+	
 	@PostMapping(value="/autenticate")
-	public ResponseEntity<?> test(@RequestBody RequestAuth requestAuth) {
+	public ResponseEntity<?> autenticate(@RequestBody RequestAuth requestAuth) {
 		
 		UserDomain user = userDao.findByEmail(requestAuth.getUsername());
 		boolean Authenticated = false;
@@ -35,13 +39,10 @@ public class AuthController {
 			Authenticated = authService.authenticate(requestAuth);
 		}
 		
-		//try {
-		//	hash = authService.hashPassword(password);
-		//}catch(Exception e) {
-		//	
-		//	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		//}
+		String jwt = jwtService.createJwt(requestAuth.getUsername());
 		
-		return new ResponseEntity<>(Authenticated, HttpStatus.OK);
+		jwtService.parseKey(jwt);
+		
+		return new ResponseEntity<>(jwt, HttpStatus.OK);
 	}
 }

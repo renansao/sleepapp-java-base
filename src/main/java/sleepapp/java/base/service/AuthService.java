@@ -10,8 +10,10 @@ import com.kosprov.jargon2.api.Jargon2.Hasher;
 import com.kosprov.jargon2.api.Jargon2.Type;
 import com.kosprov.jargon2.api.Jargon2.Verifier;
 
+import sleepapp.java.base.DAO.UidDAO;
 import sleepapp.java.base.DAO.UserDAO;
 import sleepapp.java.base.domain.RequestAuth;
+import sleepapp.java.base.domain.UidDomain;
 import sleepapp.java.base.domain.UserDomain;
 
 @Service
@@ -20,28 +22,38 @@ public class AuthService {
 	@Autowired
 	private UserDAO userDao;
 	
+	@Autowired 
+	private UidDAO uidDao;
+	
 	public void createUser(RequestAuth requestAuth) {
-		
+
 		String uidHahsed = hashPassword(requestAuth.getUid());
 		
 		UserDomain userDomain = new UserDomain();
 		userDomain.setNome(requestAuth.getName());
 		userDomain.setEmail(requestAuth.getUsername());
-		userDomain.setUid(uidHahsed.substring(30));
+		
+		UidDomain uidDomain = new UidDomain();
+		uidDomain.setUsername(requestAuth.getUsername());
+		uidDomain.setUid(uidHahsed.substring(30));
+		
+		//userDomain.setUid(uidHahsed.substring(30));
 		
 		userDao.insert(userDomain);
+		uidDao.insert(uidDomain);
 		
 	}
 
 	public boolean authenticate(RequestAuth requestAuth) {
 		
-		UserDomain user = userDao.findByEmail(requestAuth.getUsername());
+		//UserDomain user = userDao.findByEmail(requestAuth.getUsername());
+		UidDomain uidDomain = uidDao.findByUsername(requestAuth.getUsername());
 		
 		Verifier verifier = jargon2Verifier();
 		
 		byte[] uidByte = requestAuth.getUid().getBytes();
 		
-		return verifier.hash("$argon2d$v=19$m=65536,t=3,p=4$"+user.getUid()).password(uidByte).verifyEncoded();
+		return verifier.hash("$argon2d$v=19$m=65536,t=3,p=4$"+uidDomain.getUid()).password(uidByte).verifyEncoded();
 		
 	}
 	
