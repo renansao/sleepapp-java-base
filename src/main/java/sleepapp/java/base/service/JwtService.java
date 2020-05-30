@@ -3,6 +3,8 @@ package sleepapp.java.base.service;
 import java.time.Instant;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
@@ -14,6 +16,10 @@ import io.jsonwebtoken.security.SignatureException;
 @Service
 public class JwtService {
 	
+	private final String HEADER = "Authorization";
+	private final String PREFIX = "Bearer ";
+	private final String SECRET = "RraIY0negneEQzv3XO6kwjN4XVtsul1A";
+	
 	public String createJwt(String username) {
 		
 		Instant now = Instant.now();
@@ -21,8 +27,8 @@ public class JwtService {
 		byte[] secret = "RraIY0negneEQzv3XO6kwjN4XVtsul1A".getBytes();
 		
 		String jwt = Jwts.builder()
-				.setSubject("oba")
-				.setIssuer(username)
+				.setSubject(username)
+				.setIssuer("sleepapp-base")
 				.setIssuedAt(Date.from(now))
 				.setExpiration(Date.from(now.plusSeconds(1200)))
 				.signWith(Keys.hmacShaKeyFor(secret))
@@ -56,5 +62,14 @@ public class JwtService {
 	public void test() {
 		
 		
+	}
+
+	public String retrieveSub(HttpServletRequest request) {
+		return validateToken(request).getSubject();
+	}
+	
+	private Claims validateToken(HttpServletRequest request) {
+		String jwtToken = request.getHeader(HEADER).replace(PREFIX, "");
+		return Jwts.parser().setSigningKey(SECRET.getBytes()).parseClaimsJws(jwtToken).getBody();
 	}
 }

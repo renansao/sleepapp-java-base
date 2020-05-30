@@ -3,7 +3,9 @@ package sleepapp.java.base.domain;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
+import org.hibernate.validator.constraints.ISBN;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,26 +16,20 @@ public class AudioDomain {
 	@Id
 	private String audioId;
 	
-	@NotNull
-	private String userId;
+	@Null
+	private String username;
 	
 	@NotNull
 	private AudioDetails audioDetails;
 	
 	@DateTimeFormat
+	@Null
 	private Date queueInclusionDate;
 	
+	@Null
 	@DateTimeFormat
 	private Date finishedProcessingDate;
 	
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
 	public Date getQueueInclusionDate() {
 		return queueInclusionDate;
 	}
@@ -60,6 +56,14 @@ public class AudioDomain {
 
 	public void setAudioDetails(AudioDetails audioDetails) {
 		this.audioDetails = audioDetails;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 }
