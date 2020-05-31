@@ -31,8 +31,10 @@ public class AudioController {
 		String tokenSubject = jwtService.retrieveSub(req);
 		System.out.println(tokenSubject);
 		
+		
+		
 		try {
-			baseService.receiveEncodedAudio(tokenSubject, requestedAudio);
+			baseService.receiveEncodedAudio(jwtService.retrieveToken(req), tokenSubject, requestedAudio);
 		}catch(Exception e) {
 			
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

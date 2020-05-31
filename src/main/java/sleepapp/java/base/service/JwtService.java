@@ -68,6 +68,10 @@ public class JwtService {
 		return validateToken(request).getSubject();
 	}
 	
+	public String retrieveToken(HttpServletRequest request) {
+		return request.getHeader(HEADER).replace(PREFIX, "");
+	}
+	
 	private Claims validateToken(HttpServletRequest request) {
 		String jwtToken = request.getHeader(HEADER).replace(PREFIX, "");
 		return Jwts.parser().setSigningKey(SECRET.getBytes()).parseClaimsJws(jwtToken).getBody();

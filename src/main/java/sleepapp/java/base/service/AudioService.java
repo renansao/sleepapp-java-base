@@ -7,6 +7,7 @@ import sleepapp.java.base.DAO.AudioDAO;
 import sleepapp.java.base.DAO.UserDAO;
 import sleepapp.java.base.domain.AudioDomain;
 import sleepapp.java.base.domain.UserDomain;
+import sleepapp.java.base.domain.utils.AudioAnalysisDomain;
 
 @Service
 public class AudioService {
@@ -17,7 +18,13 @@ public class AudioService {
 	@Autowired
 	private UserDAO userDao;
 	
-	public void receiveEncodedAudio(String username, AudioDomain requestedAudio) throws Exception {
+	@Autowired
+	private ApiService apiService;
+	
+	@Autowired
+	private JsonService jsonService;
+	
+	public void receiveEncodedAudio(String token, String username, AudioDomain requestedAudio) throws Exception {
 		
 		UserDomain user = userDao.findByEmail(username);
 		
@@ -26,8 +33,25 @@ public class AudioService {
 		}
 		
 		requestedAudio.setUsername(username);
-
-		audioDao.insert(requestedAudio);
-
+		
+		
+		AudioDomain audioToBeInserted = new AudioDomain();
+		
+		audioToBeInserted.setUsername(username);
+		AudioDomain audioInserted = audioDao.insert(audioToBeInserted);
+		
+		
+		
+		String url = "http://127.0.0.1:5000/analyseAudio?token=";
+		url += token;
+		
+		AudioAnalysisDomain audioRequest = new AudioAnalysisDomain();
+		
+		audioRequest.setAudioId(audioInserted.getAudioId());
+		audioRequest.setEncodedAudio(requestedAudio.getAudioDetails().getEncodedAudio());
+		
+		String json = jsonService.toJson(audioRequest);
+		apiService.post(url, json);
+		//Call PYTHON API WITH requestedAudio
 	}
 }
