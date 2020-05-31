@@ -42,7 +42,7 @@ public class AudioService {
 		
 		
 		
-		String url = "http://127.0.0.1:5000/analyseAudio?token=";
+		String url = "http://186.220.196.137:3074/analyseAudio?token=";
 		url += token;
 		
 		AudioAnalysisDomain audioRequest = new AudioAnalysisDomain();
