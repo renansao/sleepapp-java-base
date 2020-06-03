@@ -55,15 +55,8 @@ public class JwtService {
 			throw new SignatureException("Token Inválido");
 		}
 		
-		
-		
 	}
 	
-	public void test() {
-		
-		
-	}
-
 	public String retrieveSub(HttpServletRequest request) {
 		return validateToken(request).getSubject();
 	}
