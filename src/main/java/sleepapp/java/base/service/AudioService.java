@@ -42,7 +42,7 @@ public class AudioService {
 		
 		
 		
-		String url = "http://186.220.196.137:5000/analyseAudio?token=";
+		String url = "https://sleepapp-py3-audio-analysis.herokuapp.com/analyseAudio?token=";
 		url += token;
 		
 		AudioAnalysisDomain audioRequest = new AudioAnalysisDomain();
