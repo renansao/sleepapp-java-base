@@ -1,6 +1,6 @@
 package sleepapp.java.base.domain.utils;
 
-public class AudioAnalysisDomain {
+public class AudioAnalysisDomainRequest {
 	
 	private String audioId;
 	
