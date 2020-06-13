@@ -1,6 +1,7 @@
 package sleepapp.java.base.service;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,8 @@ public class ApiService {
 		      .post(body)
 		      .build();
 		 
+		  client.setConnectTimeout(0, TimeUnit.SECONDS);
+		  
 		  Response response = client.newCall(request).execute();
 		  
 		  return response.body().string();
