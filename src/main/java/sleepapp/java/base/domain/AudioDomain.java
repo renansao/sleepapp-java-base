@@ -22,20 +22,23 @@ public class AudioDomain {
 	@NotNull
 	private AudioDetails audioDetails;
 	
+	@NotNull
+	private String status;
+	
 	@DateTimeFormat
 	@Null
-	private Date queueInclusionDate;
+	private Date inclusionDate;
 	
 	@Null
 	@DateTimeFormat
 	private Date finishedProcessingDate;
 	
-	public Date getQueueInclusionDate() {
-		return queueInclusionDate;
+	public Date getInclusionDate() {
+		return inclusionDate;
 	}
 
-	public void setQueueInclusionDate(Date queueInclusionDate) {
-		this.queueInclusionDate = queueInclusionDate;
+	public void setInclusionDate(Date queueInclusionDate) {
+		this.inclusionDate = queueInclusionDate;
 	}
 
 	public Date getFinishedProcessingDate() {
@@ -64,6 +67,14 @@ public class AudioDomain {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

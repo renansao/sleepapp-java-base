@@ -1,5 +1,7 @@
 package sleepapp.java.base.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,11 +41,11 @@ public class AudioService {
 		}
 		
 		requestedAudio.setUsername(username);
-		
-		
 		AudioDomain audioToBeInserted = new AudioDomain();
 		
 		audioToBeInserted.setUsername(username);
+		audioToBeInserted.setInclusionDate(new Date());
+		audioToBeInserted.setStatus("A");
 		AudioDomain audioInserted = audioDao.insert(audioToBeInserted);
 		
 		String url = "https://sleepapp-py3-audio-analysis.herokuapp.com/analyseAudio?token=";
@@ -55,18 +57,28 @@ public class AudioService {
 		audioRequest.setEncodedAudio(requestedAudio.getAudioDetails().getEncodedAudio());
 		
 		String json = jsonService.toJson(audioRequest);
-		String response = apiService.post(url, json);
 		
-		System.out.println("Resposta API (audioAnalisys): " + response);
+		try {
+			
+			//Call PYTHON API WITH requestedAudio
+			String response = apiService.post(url, json);
+			
+			System.out.println("Resposta API (audioAnalisys): " + response);
+			
+			SpeechDomain speech = (SpeechDomain) jsonService.toObject(response, SpeechDomain.class);
+			
+			AudioAnalisysDomain audioAnalysis = new AudioAnalisysDomain();
+			audioAnalysis.setAudioId(audioInserted.getAudioId());
+			audioAnalysis.setPossibleSpeech(speech.getSpeech());
+			
+			audioAnalisysDAO.insert(audioAnalysis);
+			
+			audioToBeInserted.setStatus("F");
+			audioDao.save(audioInserted);
+		}catch(Exception e) {
+			audioInserted.setStatus("E");
+			audioDao.save(audioInserted);
+		}
 		
-		SpeechDomain speech = (SpeechDomain) jsonService.toObject(response, SpeechDomain.class);
-		
-		AudioAnalisysDomain audioAnalysis = new AudioAnalisysDomain();
-		audioAnalysis.setAudioId(audioInserted.getAudioId());
-		audioAnalysis.setPossibleSpeech(speech.getSpeech());
-		
-		audioAnalisysDAO.insert(audioAnalysis);
-		
-		//Call PYTHON API WITH requestedAudio
 	}
 }
