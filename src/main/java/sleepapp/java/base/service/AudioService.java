@@ -1,6 +1,7 @@
 package sleepapp.java.base.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -102,6 +103,8 @@ public class AudioService {
 			
 			audioList.add(audioResponse);
 		}
+		
+		Collections.reverse(audioList);
 		
 		return audioList;
 		
