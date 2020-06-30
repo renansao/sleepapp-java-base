@@ -16,6 +16,9 @@ public class AudioDomain {
 	@Id
 	private String audioId;
 	
+	@NotNull
+	private String audioName;
+	
 	@Null
 	private String username;
 	
@@ -33,6 +36,17 @@ public class AudioDomain {
 	@DateTimeFormat
 	private Date finishedProcessingDate;
 	
+	@Null
+	private AudioAnalisysDomain audioAnalisys;
+	
+	public AudioAnalisysDomain getAudioAnalisys() {
+		return audioAnalisys;
+	}
+
+	public void setAudioAnalisys(AudioAnalisysDomain audioAnalisys) {
+		this.audioAnalisys = audioAnalisys;
+	}
+	
 	public Date getInclusionDate() {
 		return inclusionDate;
 	}
@@ -40,7 +54,7 @@ public class AudioDomain {
 	public void setInclusionDate(Date queueInclusionDate) {
 		this.inclusionDate = queueInclusionDate;
 	}
-
+	
 	public Date getFinishedProcessingDate() {
 		return finishedProcessingDate;
 	}
@@ -76,5 +90,15 @@ public class AudioDomain {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	public String getAudioName() {
+		return audioName;
+	}
+
+	public void setAudioName(String audioName) {
+		this.audioName = audioName;
+	}
+	
+	
 	
 }

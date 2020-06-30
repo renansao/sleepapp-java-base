@@ -1,6 +1,8 @@
 package sleepapp.java.base.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,12 +45,14 @@ public class AudioService {
 		requestedAudio.setUsername(username);
 		AudioDomain audioToBeInserted = new AudioDomain();
 		
+		audioToBeInserted.setAudioName(requestedAudio.getAudioName());
 		audioToBeInserted.setUsername(username);
 		audioToBeInserted.setInclusionDate(new Date());
 		audioToBeInserted.setStatus("A");
+		
 		AudioDomain audioInserted = audioDao.insert(audioToBeInserted);
 		
-		String url = "https://sleepapp-py3-audio-analysis.herokuapp.com/analyseAudio?token=";
+		String url = "http://127.0.0.1:5000/analyseAudio?token=";
 		url += token;
 		
 		AudioAnalysisDomainRequest audioRequest = new AudioAnalysisDomainRequest();
@@ -70,15 +74,67 @@ public class AudioService {
 			AudioAnalisysDomain audioAnalysis = new AudioAnalisysDomain();
 			audioAnalysis.setAudioId(audioInserted.getAudioId());
 			audioAnalysis.setPossibleSpeech(speech.getSpeech());
+			audioAnalysis.setDidSpeak(this.didSpeak(speech.getSpeech()));
 			
 			audioAnalisysDAO.insert(audioAnalysis);
 			
 			audioToBeInserted.setStatus("F");
+			audioInserted.setFinishedProcessingDate(new Date());
 			audioDao.save(audioInserted);
 		}catch(Exception e) {
 			audioInserted.setStatus("E");
 			audioDao.save(audioInserted);
 		}
 		
+	}
+
+	public List<AudioDomain> retrieveAudioList(String username) {
+		
+		List<AudioDomain> audioList = new ArrayList<AudioDomain>();
+		
+		for (AudioDomain audio : audioDao.findByUsername(username)  ) {
+			
+			AudioAnalisysDomain audioAnalisys = audioAnalisysDAO.findByAudioId(audio.getAudioId());
+			AudioDomain audioResponse = new AudioDomain();
+			
+			audioResponse = audio;
+			audioResponse.setAudioAnalisys(audioAnalisys);
+			
+			audioList.add(audioResponse);
+		}
+		
+		return audioList;
+		
+	}
+
+	public AudioAnalisysDomain retrieveAudioAnalisys(String username, String audioId) throws Exception {
+		
+		AudioDomain audioDomain = audioDao.findByAudioId(audioId);
+		
+		if (!audioDomain.getUsername().equalsIgnoreCase(username)) {
+			throw new Exception("Token subject does not match with username");
+		}
+		
+		AudioAnalisysDomain audioAnalysis = audioAnalisysDAO.findByAudioId(audioId);
+
+		return audioAnalysis;
+	}
+	
+	private String didSpeak (String possibleSpeech) {
+		
+		String[] words;
+		words = possibleSpeech.split(" ");
+		
+		if (words.length > 3) {
+			return "S";
+			
+		}else if (words.length == 0) {
+			return "N";
+			
+		}else {
+			
+			return "I";
+		}
+
 	}
 }

@@ -6,4 +6,5 @@ import sleepapp.java.base.domain.AudioAnalisysDomain;
 
 public interface AudioAnalisysDAO extends MongoRepository<AudioAnalisysDomain, String>{
 	
+	public AudioAnalisysDomain findByAudioId (String audioId);
 }

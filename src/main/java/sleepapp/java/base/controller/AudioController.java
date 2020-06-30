@@ -1,15 +1,22 @@
 package sleepapp.java.base.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import sleepapp.java.base.domain.AudioAnalisysDomain;
 import sleepapp.java.base.domain.AudioDomain;
 import sleepapp.java.base.service.AudioService;
 import sleepapp.java.base.service.JwtService;
@@ -30,8 +37,6 @@ public class AudioController {
 		System.out.println(checkJWTToken(req));
 		String tokenSubject = jwtService.retrieveSub(req);
 		System.out.println(tokenSubject);
-		
-		
 		
 		try {
 			baseService.receiveEncodedAudio(jwtService.retrieveToken(req), tokenSubject, requestedAudio);
@@ -54,14 +59,32 @@ public class AudioController {
 		return true;
 	}
 	
-	//@GetMapping(value="/retrieveAudioList/{userId}")
-	//public ResponseEntity<?> retrieveAudioList(@PathVariable String userId){
-	//
-	//	List<AudioDomain>
+	@GetMapping(value="/retrieveAudioList")
+	public ResponseEntity<?> retrieveAudioList(HttpServletRequest req){
+	
+		List<AudioDomain> usersAudio = new ArrayList<AudioDomain>();
+		
+		try {
+			usersAudio = baseService.retrieveAudioList(jwtService.retrieveSub(req));
+		}catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<>(usersAudio, HttpStatus.OK);
+	}
+	
+	//@GetMapping(value="/retrieveAudioAnalisys/{audioId}")
+	//public ResponseEntity<?> retrieveAudioAnalisys(HttpServletRequest req, @PathVariable String audioId){
+	//	
+	//	AudioAnalisysDomain audioAnalisys = new AudioAnalisysDomain();
 	//	
 	//	try {
-	//		baseService.retrieveAudioList(userId);
+	//		audioAnalisys = baseService.retrieveAudioAnalisys(jwtService.retrieveSub(req), audioId);
+	//	}catch (Exception e) {
+	//		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 	//	}
+	//	
+	//	return new ResponseEntity<>(audioAnalisys, HttpStatus.OK);
 	//}
 	
 }

@@ -11,8 +11,10 @@ public class AudioAnalisysDomain {
 	private String audioId;
 	
 	private String possibleSpeech;
-
-	public String getAudioId() {
+	
+	private String didSpeak;
+	
+	public String getAuidoId() {
 		return audioId;
 	}
 
@@ -26,6 +28,14 @@ public class AudioAnalisysDomain {
 
 	public void setPossibleSpeech(String possibleSpeech) {
 		this.possibleSpeech = possibleSpeech;
+	}
+
+	public String getDidSpeak() {
+		return didSpeak;
+	}
+
+	public void setDidSpeak(String didSpeak) {
+		this.didSpeak = didSpeak;
 	}
 	
 }
