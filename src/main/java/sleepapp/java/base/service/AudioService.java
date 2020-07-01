@@ -12,6 +12,7 @@ import sleepapp.java.base.DAO.AudioAnalisysDAO;
 import sleepapp.java.base.DAO.AudioDAO;
 import sleepapp.java.base.DAO.UserDAO;
 import sleepapp.java.base.domain.AudioAnalisysDomain;
+import sleepapp.java.base.domain.AudioAnalisysSummary;
 import sleepapp.java.base.domain.AudioDomain;
 import sleepapp.java.base.domain.SpeechDomain;
 import sleepapp.java.base.domain.UserDomain;
@@ -139,5 +140,44 @@ public class AudioService {
 			return "I";
 		}
 
+	}
+
+	public AudioAnalisysSummary retrieveAudioListSummary(String username) {
+		
+		AudioAnalisysSummary audioResponse = new AudioAnalisysSummary();
+		
+		int spoke = 0;
+		int didntSpeak = 0;
+		int inconclusive = 0;
+		int error = 0;
+		
+		for (AudioDomain audio : this.retrieveAudioList(username)) {
+			if (audio.getAudioAnalisys() != null) {
+				if (audio.getAudioAnalisys().getDidSpeak().equalsIgnoreCase("S")) {
+					spoke += 1;
+				}else if (audio.getAudioAnalisys().getDidSpeak().equalsIgnoreCase("N")) {
+					didntSpeak += 1;
+				}else {
+					inconclusive += 1;
+				}
+			}else {
+				error +=1;
+			}
+		}
+		
+		audioResponse.setUsername(username);
+		audioResponse.setDidntSpeak(didntSpeak);
+		audioResponse.setInconclusive(inconclusive);
+		audioResponse.setSpoke(spoke);
+		audioResponse.setError(error);
+		if (spoke >= 1) {
+			audioResponse.setShouldGoToDoctor("S");
+		}else if (error >= 1){
+			audioResponse.setShouldGoToDoctor("I");
+		}else {
+			audioResponse.setShouldGoToDoctor("N");
+		}
+		
+		return audioResponse;
 	}
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import sleepapp.java.base.domain.AudioAnalisysDomain;
+import sleepapp.java.base.domain.AudioAnalisysSummary;
 import sleepapp.java.base.domain.AudioDomain;
 import sleepapp.java.base.service.AudioService;
 import sleepapp.java.base.service.JwtService;
@@ -72,6 +73,22 @@ public class AudioController {
 		
 		return new ResponseEntity<>(usersAudio, HttpStatus.OK);
 	}
+	
+	@GetMapping(value="/retrieveAudioListSummary")
+	public ResponseEntity<?> retrieveAudioListSummary (HttpServletRequest req){
+		
+		AudioAnalisysSummary summary = new AudioAnalisysSummary();
+		
+		try {
+			summary = baseService.retrieveAudioListSummary(jwtService.retrieveSub(req));
+		}catch(Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<>(summary, HttpStatus.OK);
+	}
+	
+	
 	
 	//@GetMapping(value="/retrieveAudioAnalisys/{audioId}")
 	//public ResponseEntity<?> retrieveAudioAnalisys(HttpServletRequest req, @PathVariable String audioId){
