@@ -54,7 +54,7 @@ public class AudioService {
 		
 		AudioDomain audioInserted = audioDao.insert(audioToBeInserted);
 		
-		String url = "http://127.0.0.1:5000/analyseAudio?token=";
+		String url = "https://java-reservation-application.herokuapp.com/analyseAudio?token=";
 		url += token;
 		
 		AudioAnalysisDomainRequest audioRequest = new AudioAnalysisDomainRequest();
