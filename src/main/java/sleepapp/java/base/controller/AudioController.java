@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import sleepapp.java.base.domain.AudioAnalisysDomain;
 import sleepapp.java.base.domain.AudioAnalisysSummary;
 import sleepapp.java.base.domain.AudioDomain;
+import sleepapp.java.base.domain.FileKeySaveDomain;
 import sleepapp.java.base.service.AudioService;
 import sleepapp.java.base.service.JwtService;
 
@@ -88,7 +89,17 @@ public class AudioController {
 		return new ResponseEntity<>(summary, HttpStatus.OK);
 	}
 	
-	
+	@PostMapping(value="/saveFilesKey")
+	public ResponseEntity<?> saveFilesKey (HttpServletRequest req, @RequestBody FileKeySaveDomain fileKeySaveDomain){
+		
+		try {
+			baseService.saveFilesKey(jwtService.retrieveSub(req), fileKeySaveDomain);
+		}catch (Exception e) {
+			
+		}
+		return null;
+		
+	}
 	
 	//@GetMapping(value="/retrieveAudioAnalisys/{audioId}")
 	//public ResponseEntity<?> retrieveAudioAnalisys(HttpServletRequest req, @PathVariable String audioId){

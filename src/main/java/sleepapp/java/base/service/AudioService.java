@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import sleepapp.java.base.DAO.UserDAO;
 import sleepapp.java.base.domain.AudioAnalisysDomain;
 import sleepapp.java.base.domain.AudioAnalisysSummary;
 import sleepapp.java.base.domain.AudioDomain;
+import sleepapp.java.base.domain.FileKeySaveDomain;
 import sleepapp.java.base.domain.SpeechDomain;
 import sleepapp.java.base.domain.UserDomain;
 import sleepapp.java.base.domain.utils.AudioAnalysisDomainRequest;
@@ -179,5 +182,18 @@ public class AudioService {
 		}
 		
 		return audioResponse;
+	}
+
+	public void saveFilesKey(String usernameInToken, FileKeySaveDomain fileKeySaveDomain) throws Exception {
+		
+		AudioDomain audio = audioDao.findByAudioId(fileKeySaveDomain.getAudioId());
+		
+		if (!audio.getUsername().equalsIgnoreCase(usernameInToken)) {
+			throw new Exception("Token does not match with username");
+		}
+		
+		audio.setAudioKey(fileKeySaveDomain.getAudioKey());
+		audio.setPdfKey(fileKeySaveDomain.getPdfKey());
+		audioDao.save(audio);
 	}
 }

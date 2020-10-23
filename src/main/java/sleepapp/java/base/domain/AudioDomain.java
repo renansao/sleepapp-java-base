@@ -38,6 +38,10 @@ public class AudioDomain {
 	
 	@Null
 	private AudioAnalisysDomain audioAnalisys;
+
+	private String pdfKey;
+	
+	private String audioKey;
 	
 	public AudioAnalisysDomain getAudioAnalisys() {
 		return audioAnalisys;
@@ -98,7 +102,21 @@ public class AudioDomain {
 	public void setAudioName(String audioName) {
 		this.audioName = audioName;
 	}
-	
-	
+
+	public String getPdfKey() {
+		return pdfKey;
+	}
+
+	public void setPdfKey(String pdfKey) {
+		this.pdfKey = pdfKey;
+	}
+
+	public String getAudioKey() {
+		return audioKey;
+	}
+
+	public void setAudioKey(String audioKey) {
+		this.audioKey = audioKey;
+	}
 	
 }
